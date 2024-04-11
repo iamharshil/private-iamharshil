@@ -1,10 +1,4 @@
 import React, { useEffect } from "react";
-import {
-	InputOTP,
-	InputOTPGroup,
-	InputOTPSeparator,
-	InputOTPSlot,
-} from "@/components/ui/input-otp";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -33,26 +27,20 @@ export default function Verify() {
 		}
 	}, [value, router]);
 	return (
-		<main className="h-screen w-screen">
+		<main className="h-screen w-screen bg-zinc-900 text-white">
 			<div className="container flex align-middle justify-center h-screen">
-				<InputOTP
-					maxLength={6}
-					value={value}
-					onChange={(value) => setValue(value)}
-					className="md:w-1/2 lg:w-1/3"
-				>
-					<InputOTPGroup>
-						<InputOTPSlot index={0} />
-						<InputOTPSlot index={1} />
-						<InputOTPSlot index={2} />
-					</InputOTPGroup>
-					<InputOTPSeparator />
-					<InputOTPGroup>
-						<InputOTPSlot index={3} />
-						<InputOTPSlot index={4} />
-						<InputOTPSlot index={5} />
-					</InputOTPGroup>
-				</InputOTP>
+				<div className="m-auto">
+					<h2 className="text-gray-400 text-sm">Enter password here:</h2>
+					<div className="flex flex-col">
+						<input
+							className="bg-gray-800 text-white rounded-lg px-4 py-2 text-center"
+							maxLength={6}
+							type="number"
+							value={value}
+							onChange={(e) => setValue(e.target.value)}
+						/>
+					</div>
+				</div>
 			</div>
 		</main>
 	);
