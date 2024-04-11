@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-mongoose.set("strictQuery", true);
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
@@ -8,29 +7,23 @@ if (!MONGODB_URI) {
 	);
 }
 
-let cached = global.mongoose;
-
-if (!cached) {
-	cached = global.mongoose = { conn: null, promise: null };
-}
+const connection = {};
 
 async function Database() {
-	if (cached.conn) {
-		return cached.conn;
+	if (connection.isConnected) {
+		console.log("⚙ => using existing database connection");
+		return;
 	}
 
-	if (!cached.promise) {
-		const opts = {
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-		};
+	try {
+		const db = await mongoose.connect(MONGODB_URI || "");
+		connection.isConnected = db.connections[0].readyState;
 
-		cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-			return mongoose;
-		});
+		console.log("⚙ => new database connection");
+	} catch (error) {
+		console.log("⚙ => error connecting to database:", error);
+		process.exit(1);
 	}
-	cached.conn = await cached.promise;
-	return cached.conn;
 }
 
 export default Database;
